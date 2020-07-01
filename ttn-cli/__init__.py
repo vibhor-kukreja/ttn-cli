@@ -1,0 +1,2 @@
+
+print("ttn-cli loaded")
