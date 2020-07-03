@@ -15,7 +15,7 @@ Now run this command from the same directory where setup.py is located:
 python3 setup.py sdist bdist_wheel
 ```
 
-To Run In Development Mode
+## To Run In Development Mode
 
 Setup a virtual environment to install the package
 ```
