@@ -1,2 +1,0 @@
-
-print("ttn-cli loaded")

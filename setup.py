@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="ttn-cli",
+    name="ttncli",
     version="0.0.1",
     author="TTN",
     author_email="vibhor.kukreja@tothenew.com",
@@ -17,5 +17,10 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': [
+            'ttn_cli=ttn_cli:main',
+        ],
+    },
     python_requires='>=3.6',
 )
