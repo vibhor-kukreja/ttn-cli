@@ -1,6 +1,9 @@
 # This file contains all the git related methods
 import os
 
+# import subprocess
+from datetime import date, datetime
+
 from git import Repo, InvalidGitRepositoryError
 
 
@@ -10,7 +13,7 @@ class GithubOperations:
 
         # Checks if repo is initialised or not
         try:
-            self.repo = Repo('/home/amulya/Desktop/TTN_CLI/ttn-cli/')
+            self.repo = Repo(self.path)
             # self.repo = Repo(self.path)
         except InvalidGitRepositoryError:
             print("Git Repository not Initialised. "
@@ -32,8 +35,24 @@ class GithubOperations:
         commit_list = self.get_commits()
         return list(f"{i.message} -> {i.author}" for i in commit_list)
 
-    def get_logs(self, author=''):
-        return self.repo.git.log("--oneline", f"--author={author}")
+    def get_logs(self, author: str = '', from_date: str = None) -> str:
+        """
+        This method fetch the git logs w.r.t from date.
+        :param author: Name of author in form of string
+        :param from_date: From date in '%Y-%m-%d' format as string
+        :return: git logs in string form
+        """
+        try:
+            from_date = str(datetime.strptime(from_date, '%Y-%m-%d').date())
+        except ValueError as err:
+            print(err)
+            from_date = date.today().strftime('%Y-%m-%d')
+        print("Selected date: {}".format(from_date))
+        return self.repo.git.log("--oneline",
+                                 f'--author={author}',
+                                 f'--after={from_date}')
 
 
-print(GithubOperations().get_logs())
+git = GithubOperations()
+print(git.get_commit_message())
+print(git.get_logs(author="vibhor", from_date="2020-07-02"))
