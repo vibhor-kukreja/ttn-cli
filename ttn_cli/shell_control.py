@@ -1,24 +1,7 @@
 from cmd import Cmd
-import subprocess
-from typing import Iterable
 
-
-def execute(cmd) -> None:
-    """
-    This method executes the shell command provided and returns the output
-    :param cmd:
-    :return: None
-    """
-    popen = subprocess.Popen(cmd,
-                             stdout=subprocess.PIPE,
-                             universal_newlines=True,
-                             shell=True)
-    for stdout_line in iter(popen.stdout.readline, ""):
-        yield stdout_line
-    popen.stdout.close()
-    return_code = popen.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, cmd)
+from .utils.helper import get_choice, get_methods, get_help
+from .modules import cmd_classes
 
 
 class CommandPrompt(Cmd):
@@ -28,28 +11,42 @@ class CommandPrompt(Cmd):
     to see help on a specific command, enter help <command_name>
     Ex- help say_hi
     """
-    prompt = '>'
+    avail_methods = None
+    prompt = None
+    choice = None
     intro = "Welcome! Type ? to list commands"
 
-    def do_hello(self, inp):
-        """
-        Say hello to the user
-        Ex- hello User
-        """
-        print("Hey! {}".format(inp))
+    def default(self, inp):
+        """Run in cases the above doesn't match"""
+        command, *arguments = inp.split()
+        try:
+            self.avail_methods[command](arguments)
+        except KeyError:
+            print("Unknown command, please ? for available commands")
 
     def do_exit(self, inp):
-        """exit the application"""
-        print("Bye")
+        print("Goodbye Friend!")
         return True
 
-    def default(self, inp: Iterable):
-        """Run in cases the above doesn't match"""
-        try:
-            for path in execute(inp):
-                print(path, end="")
-        except subprocess.CalledProcessError:
-            print("Unknown command: {}".format(inp))
+    def do_help(self, inp: str):
+        options = list(self.avail_methods.keys())
+        options.append("exit")
+        print(get_help(options))
+
+    def emptyline(self):
+        pass
+
+    def preloop(self):
+        self.choice = get_choice(cmd_classes)
+        if self.choice is None:
+            self.preloop()
+
+        choice_module = cmd_classes[self.choice]
+        self.avail_methods = get_methods(choice_module)
+        self.prompt = '({})>'.format(cmd_classes[self.choice])
+
+    # def do_leave(self, inp):
+    #     self.preloop()
 
 
 command_prompt = CommandPrompt()
