@@ -1,5 +1,4 @@
 from .shell_control import command_prompt
-from sys import argv
 
 
 def main() -> None:

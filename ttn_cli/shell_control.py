@@ -1,4 +1,5 @@
 from cmd import Cmd
+from typing import AnyStr
 
 from .utils.helper import get_choice, get_methods, get_help
 from .modules import cmd_classes
@@ -6,47 +7,72 @@ from .modules import cmd_classes
 
 class CommandPrompt(Cmd):
     """
-    This class contains method to execute
-    to see help options, enter help
-    to see help on a specific command, enter help <command_name>
-    Ex- help say_hi
+    This class contains method to execute as part of shell
+    For help, enter ? to show list of commands at any point
+    of time.
     """
     avail_methods = None
     prompt = None
     choice = None
     intro = "Welcome! Type ? to list commands"
 
-    def default(self, inp):
-        """Run in cases the above doesn't match"""
+    def default(self, inp: AnyStr) -> None:
+        """
+        This method is called every time a command is issued from shell
+        :param inp: The command, i.e. a string of words issued from shell
+        :return: None
+        """
         command, *arguments = inp.split()
         try:
-            self.avail_methods[command](arguments)
+            self.avail_methods[command](arguments)  # execute the command
         except KeyError:
             print("Unknown command, please ? for available commands")
 
-    def do_exit(self, inp):
+    def do_exit(self, inp: AnyStr = None) -> bool:
+        """
+        This method calls exit and closes the shell
+        :param inp: String containing arguments provided after exit, if any
+        :return: None
+        """
         print("Goodbye Friend!")
         return True
 
-    def do_help(self, inp: str):
+    def do_help(self, inp: AnyStr) -> None:
+        """
+        This method returns and displays a list of commands available
+        For user to run based on choice selected
+        :param inp: String of arguments provided after help or ?, if any
+        :return: None
+        """
         options = list(self.avail_methods.keys())
         options.append("exit")
         print(get_help(options))
 
-    def emptyline(self):
+    def emptyline(self) -> None:
+        """
+        This method overrides the flow when enter key is pressed and
+        no command is provided, and hence does nothing.
+        :return: None
+        """
         pass
 
-    def preloop(self):
+    def preloop(self) -> None:
+        """
+        This method is executed for the first and only time when
+        the shell is activated from the terminal, with purpose
+        to receive the choice from user
+        :return: None
+        """
         self.choice = get_choice(cmd_classes)
+        # until a valid choice is selected, repeat this
         if self.choice is None:
             self.preloop()
 
         choice_module = cmd_classes[self.choice]
+
+        # get methods present in the module selected as choice above
         self.avail_methods = get_methods(choice_module)
         self.prompt = '({})>'.format(cmd_classes[self.choice])
-
-    # def do_leave(self, inp):
-    #     self.preloop()
 
 
 command_prompt = CommandPrompt()
