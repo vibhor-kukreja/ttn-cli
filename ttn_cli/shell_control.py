@@ -1,55 +1,78 @@
 from cmd import Cmd
-import subprocess
-from typing import Iterable
+from typing import AnyStr
 
-
-def execute(cmd) -> None:
-    """
-    This method executes the shell command provided and returns the output
-    :param cmd:
-    :return: None
-    """
-    popen = subprocess.Popen(cmd,
-                             stdout=subprocess.PIPE,
-                             universal_newlines=True,
-                             shell=True)
-    for stdout_line in iter(popen.stdout.readline, ""):
-        yield stdout_line
-    popen.stdout.close()
-    return_code = popen.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, cmd)
+from .utils.helper import get_choice, get_methods, get_help
+from .modules import cmd_classes
 
 
 class CommandPrompt(Cmd):
     """
-    This class contains method to execute
-    to see help options, enter help
-    to see help on a specific command, enter help <command_name>
-    Ex- help say_hi
+    This class contains method to execute as part of shell
+    For help, enter ? to show list of commands at any point
+    of time.
     """
-    prompt = '>'
+    avail_methods = None
+    prompt = None
+    choice = None
     intro = "Welcome! Type ? to list commands"
 
-    def do_hello(self, inp):
+    def default(self, inp: AnyStr) -> None:
         """
-        Say hello to the user
-        Ex- hello User
+        This method is called every time a command is issued from shell
+        :param inp: The command, i.e. a string of words issued from shell
+        :return: None
         """
-        print("Hey! {}".format(inp))
+        command, *arguments = inp.split()
+        try:
+            self.avail_methods[command](*arguments)  # execute the command
+        except KeyError:
+            print("Unknown command, please ? for available commands")
 
-    def do_exit(self, inp):
-        """exit the application"""
-        print("Bye")
+    def do_exit(self, inp: AnyStr = None) -> bool:
+        """
+        This method calls exit and closes the shell
+        :param inp: String containing arguments provided after exit, if any
+        :return: None
+        """
+        print("Goodbye Friend!")
         return True
 
-    def default(self, inp: Iterable):
-        """Run in cases the above doesn't match"""
-        try:
-            for path in execute(inp):
-                print(path, end="")
-        except subprocess.CalledProcessError:
-            print("Unknown command: {}".format(inp))
+    def do_help(self, inp: AnyStr) -> None:
+        """
+        This method returns and displays a list of commands available
+        For user to run based on choice selected
+        :param inp: String of arguments provided after help or ?, if any
+        :return: None
+        """
+        options = list(self.avail_methods.keys())
+        options.append("exit")
+        print(get_help(options))
+
+    def emptyline(self) -> None:
+        """
+        This method overrides the flow when enter key is pressed and
+        no command is provided, and hence does nothing.
+        :return: None
+        """
+        pass
+
+    def preloop(self) -> None:
+        """
+        This method is executed for the first and only time when
+        the shell is activated from the terminal, with purpose
+        to receive the choice from user
+        :return: None
+        """
+        self.choice = get_choice(cmd_classes)
+        # until a valid choice is selected, repeat this
+        if self.choice is None:
+            self.preloop()
+
+        choice_module = cmd_classes[self.choice]
+
+        # get methods present in the module selected as choice above
+        self.avail_methods = get_methods(choice_module)
+        self.prompt = '({})>'.format(cmd_classes[self.choice])
 
 
 command_prompt = CommandPrompt()
