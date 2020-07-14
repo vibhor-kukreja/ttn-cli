@@ -24,7 +24,7 @@ class CommandPrompt(Cmd):
         """
         command, *arguments = inp.split()
         try:
-            self.avail_methods[command](arguments)  # execute the command
+            self.avail_methods[command](*arguments)  # execute the command
         except KeyError:
             print("Unknown command, please ? for available commands")
 
