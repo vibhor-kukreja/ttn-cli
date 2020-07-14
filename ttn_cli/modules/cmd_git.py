@@ -1,8 +1,10 @@
-# module containing git related methods
-def sample_method(*args):
-    """
-    Sample method, to be replaced
-    :param args:
-    :return:
-    """
-    print("Replace this with something useful")
+import os
+
+from datetime import date, datetime
+from typing import List
+
+from git import Repo, InvalidGitRepositoryError, CheckoutError, GitCommandError
+
+
+class Command:
+    pass

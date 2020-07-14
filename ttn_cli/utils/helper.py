@@ -45,8 +45,15 @@ def get_methods(class_name: AnyStr) -> Dict:
     methods = dict()
     try:
         module = import_module("ttn_cli.modules.cmd_{}".format(class_name))
+
+        class_tuple = \
+            dict(inspect.getmembers(module, predicate=inspect.isclass))
+
+        # will call init method
+        class_object = class_tuple['Command']()
+
         methods_tuple = \
-            inspect.getmembers(module, predicate=inspect.isfunction)
+            inspect.getmembers(class_object, predicate=inspect.ismethod)[1:]
         for name, method in methods_tuple:
             methods.update({name: method})
         return methods
