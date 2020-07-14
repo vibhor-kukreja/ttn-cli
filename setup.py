@@ -17,6 +17,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
+    install_requires=[
+        'Click',
+    ],
     entry_points={
         'console_scripts': [
             'ttn_cli=ttn_cli:main',

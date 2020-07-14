@@ -40,3 +40,6 @@ class Command:
             private_ip = s.getsockname()[0]
             s.close()
         return private_ip
+
+
+cmd_network = Command()

@@ -149,3 +149,6 @@ class Command:
             return self.repo.git.branch("-d", branch_name)
         except GitCommandError as err:
             return err.args[2].decode("utf-8")
+
+
+cmd_git = Command()
