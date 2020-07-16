@@ -66,7 +66,7 @@ class Command:
         return "Cannot fetch active branch. " \
                "Make sure you're in the correct path."
 
-    def get_commits(self) -> Union[List, str]:
+    def _get_commits(self) -> Union[List, str]:
         """
         This method returns the list of commits on active branch.
         :return: List of commits or suitable error
@@ -82,7 +82,7 @@ class Command:
         :return: Count of commits or suitable error
         """
         if self._check_repo():
-            return len(self.get_commits())
+            return len(self._get_commits())
         return "Cannot get commit count. " \
                "Make sure you're in the correct path."
 
@@ -93,8 +93,12 @@ class Command:
         :return: List of commit messages or suitable error.
         """
         if self._check_repo():
-            commit_list = self.get_commits()
-            return list(f"{i.message} -> {i.author}" for i in commit_list)
+            commit_list = self._get_commits()
+            list_commit = list("{} \t Author: {}\n"
+                               .format(commit.message.replace('\n', ''),
+                                       commit.author)
+                               for commit in commit_list)
+            return ''.join(list_commit)
         return "Cannot get commit messages. " \
                "Make sure you're in the correct path."
 
@@ -120,7 +124,7 @@ class Command:
         return "Cannot fetch required logs. " \
                "Make sure you're in the correct path."
 
-    def branch_checkout(self, branch_name: str) -> str:
+    def branch_checkout(self, branch_name: str = None) -> str:
         """
         This method checkouts to the given branch
         else throws the specific error.
@@ -138,7 +142,7 @@ class Command:
         return "Cannot checkout on given branch. " \
                "Make sure you're in the correct path."
 
-    def delete_local_branch(self, branch_name: str) -> str:
+    def delete_local_branch(self, branch_name: str = None) -> str:
         """
         This method deletes the git branch in local
         and throws an error if branch doesn't exists.
