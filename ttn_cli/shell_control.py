@@ -1,5 +1,5 @@
 from cmd import Cmd
-from typing import AnyStr
+from typing import AnyStr, List, Optional
 
 from .utils.helper import get_choice, get_methods, get_help
 from .modules import cmd_classes
@@ -16,6 +16,19 @@ class CommandPrompt(Cmd):
     choice = None
     intro = "Welcome! Type ? to list commands"
 
+    def completenames(self, text, *args) -> Optional[List[str]]:
+        """
+        This method enables autocomplete over the available methods
+        in the shell by pressing tab after writing 1 alphabet or more
+        :param text: Text in the shell buffer to which complete is called
+        :return: List of available methods matching the text in shell
+        """
+        complete_methods = \
+            list(filter(lambda method_name: method_name.startswith(text),
+                        list(self.avail_methods.keys()))) or \
+            super().completenames(text)
+        return complete_methods
+
     def default(self, inp: AnyStr) -> None:
         """
         This method is called every time a command is issued from shell
@@ -29,6 +42,9 @@ class CommandPrompt(Cmd):
             print(output)
         except KeyError:
             print("Unknown command, please ? for available commands")
+        except Exception as err:
+            print("Following error occurred: {}".format(err))
+            print("Please ? for available commands")
 
     def do_exit(self, inp: AnyStr = None) -> bool:
         """
