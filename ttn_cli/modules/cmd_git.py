@@ -45,13 +45,14 @@ class Command:
         self.repo = Repo.init(self.path)
         return f"Repo Initialised to path '{self.path}'"
 
-    def get_all_branches(self) -> Union[List, str]:
+    def get_all_branches(self) -> str:
         """
         This method return all the branches.
-        :return: List of branches or suitable error
+        :return: All available branches or suitable error
         """
         if self._check_repo():
-            return [branch.name for branch in self.repo.branches]
+            return '\n'.join(list(branch.name
+                                  for branch in self.repo.branches))
         return "Cannot fetch branches. " \
                "Make sure you're in the correct path."
 
@@ -86,11 +87,11 @@ class Command:
         return "Cannot get commit count. " \
                "Make sure you're in the correct path."
 
-    def get_commit_message(self) -> Union[List, str]:
+    def get_commit_message(self) -> str:
         """
         This method returns the commit
         messages along with the author name.
-        :return: List of commit messages or suitable error.
+        :return: Commit messages or suitable error.
         """
         if self._check_repo():
             commit_list = self._get_commits()
