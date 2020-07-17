@@ -114,8 +114,7 @@ class Command:
             try:
                 from_date = str(datetime.
                                 strptime(from_date, '%Y-%m-%d').date())
-            except ValueError as err:
-                print(err)
+            except TypeError:
                 from_date = date.today().strftime('%Y-%m-%d')
             print("Selected date: {}".format(from_date))
             return self.repo.git.log("--oneline",
@@ -143,7 +142,7 @@ class Command:
         return "Cannot checkout on given branch. " \
                "Make sure you're in the correct path."
 
-    def delete_local_branch(self, branch_name: str = None) -> str:
+    def delete_local_branch(self, branch_name: str = '') -> str:
         """
         This method deletes the git branch in local
         and throws an error if branch doesn't exists.
