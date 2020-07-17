@@ -36,6 +36,16 @@ class Command:
         except AttributeError:
             return False
 
+    def _get_commits(self) -> Union[List, str]:
+        """
+        This method returns the list of commits on active branch.
+        :return: List of commits or suitable error
+        """
+        if self._check_repo():
+            return list(self.repo.iter_commits(self.get_active_branch()))
+        return "Cannot get commits. " \
+               "Make sure you're in the correct path."
+
     def init_repo(self) -> str:
         """
         This method initialises
@@ -65,16 +75,6 @@ class Command:
         if self._check_repo():
             return self.repo.active_branch
         return "Cannot fetch active branch. " \
-               "Make sure you're in the correct path."
-
-    def _get_commits(self) -> Union[List, str]:
-        """
-        This method returns the list of commits on active branch.
-        :return: List of commits or suitable error
-        """
-        if self._check_repo():
-            return list(self.repo.iter_commits(self.get_active_branch()))
-        return "Cannot get commits. " \
                "Make sure you're in the correct path."
 
     def get_commit_count(self) -> Union[int, str]:
