@@ -18,7 +18,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        'Click',
+        'Click==7.1.0',
+        'GitPython==3.1.3',
     ],
     entry_points={
         'console_scripts': [
