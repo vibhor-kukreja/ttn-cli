@@ -55,7 +55,7 @@ class Command:
         self.repo = Repo.init(self.path)
         return f"Repo Initialised to path '{self.path}'"
 
-    def get_all_branches(self) -> str:
+    def all_branches(self) -> str:
         """
         This method return all the branches.
         :return: All available branches or suitable error
@@ -66,7 +66,7 @@ class Command:
         return "Cannot fetch branches. " \
                "Make sure you're in the correct path."
 
-    def get_active_branch(self) -> str:
+    def active_branch(self) -> str:
         """
         This method returns the active branch
         on which you are currently.
@@ -77,7 +77,7 @@ class Command:
         return "Cannot fetch active branch. " \
                "Make sure you're in the correct path."
 
-    def get_commit_count(self) -> Union[int, str]:
+    def commit_count(self) -> Union[int, str]:
         """
         This method returns the total number of commits on a branch.
         :return: Count of commits or suitable error
@@ -87,7 +87,7 @@ class Command:
         return "Cannot get commit count. " \
                "Make sure you're in the correct path."
 
-    def get_commit_message(self) -> str:
+    def commit_message(self) -> str:
         """
         This method returns the commit
         messages along with the author name.
@@ -103,13 +103,14 @@ class Command:
         return "Cannot get commit messages. " \
                "Make sure you're in the correct path."
 
-    def get_logs(self, author: str = '', from_date: str = None) -> str:
+    def logs(self, author: str = '', from_date: str = None) -> str:
         """
         This method fetch the git logs w.r.t from date.
         :param author: Name of author in form of string
         :param from_date: From date in '%Y-%m-%d' format as string
         :return: git logs in string form or suitable error
         """
+        print("Eg: logs 'author' 'YY-MM-DD'\n")
         if self._check_repo():
             try:
                 from_date = str(datetime.
@@ -124,13 +125,14 @@ class Command:
         return "Cannot fetch required logs. " \
                "Make sure you're in the correct path."
 
-    def branch_checkout(self, branch_name: str = None) -> str:
+    def checkout(self, branch_name: str = None) -> str:
         """
         This method checkouts to the given branch
         else throws the specific error.
         :param branch_name: Name of the branch
         :return: Checkouts to given branch (or) throws error if any
         """
+        print("Eg: checkout 'branch_name'\n")
         if self._check_repo():
             try:
                 return self.repo.git.checkout(branch_name)
@@ -149,6 +151,7 @@ class Command:
         :param branch_name: Name of the branch
         :return: Message if branch is deleted (or) error has occurred.
         """
+        print("Eg: delete_local_branch 'branch_name'\n")
         try:
             return self.repo.git.branch("-d", branch_name)
         except GitCommandError as err:
