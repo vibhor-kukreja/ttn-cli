@@ -15,6 +15,13 @@ Now run this command from the same directory where setup.py is located:
 python3 setup.py sdist bdist_wheel
 ```
 
+## To Install The Library Locally
+
+Inside the folder containing setup.py
+```javascript
+python3 setup.py install
+```
+
 ## To Run In Development Mode
 
 Setup a virtual environment to install the package
