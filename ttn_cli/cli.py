@@ -33,7 +33,7 @@ def branch():
     """
     Show the current branch.
     """
-    click.echo(cmd_git.get_active_branch())
+    click.echo(cmd_git.active_branch())
 
 
 @git.command()
@@ -41,7 +41,7 @@ def branches():
     """
     List all the branches in a repository.
     """
-    click.echo(cmd_git.get_all_branches())
+    click.echo(cmd_git.all_branches())
 
 
 @git.command()
@@ -49,7 +49,7 @@ def commit_count():
     """
     Count the total number of commits.
     """
-    click.echo(cmd_git.get_commit_count())
+    click.echo(cmd_git.commit_count())
 
 
 @git.command()
@@ -57,7 +57,7 @@ def commit_message():
     """
     Command used to show the commit messages.
     """
-    click.echo(cmd_git.get_commit_message())
+    click.echo(cmd_git.commit_message())
 
 
 @git.command()
@@ -67,7 +67,7 @@ def logs(from_date, author):
     """
     Command used to fetch user logs from a particular date
     """
-    click.echo(cmd_git.get_logs(author=author, from_date=from_date))
+    click.echo(cmd_git.logs(author=author, from_date=from_date))
 
 
 @git.command()
@@ -76,7 +76,7 @@ def branch_checkout(branch):
     """
     Checkout to any particular branch
     """
-    click.echo(cmd_git.branch_checkout(branch_name=branch))
+    click.echo(cmd_git.checkout(branch_name=branch))
 
 
 @git.command()

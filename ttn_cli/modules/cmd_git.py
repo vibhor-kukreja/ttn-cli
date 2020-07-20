@@ -42,7 +42,7 @@ class Command:
         :return: List of commits or suitable error
         """
         if self._check_repo():
-            return list(self.repo.iter_commits(self.get_active_branch()))
+            return list(self.repo.iter_commits(self.active_branch()))
         return "Cannot get commits. " \
                "Make sure you're in the correct path."
 

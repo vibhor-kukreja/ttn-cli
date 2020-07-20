@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ttncli",
-    version="0.0.1",
-    author="TTN",
+    version="0.0.8",
+    author="BASICCLI",
     author_email="vibhor.kukreja@tothenew.com",
-    description="Command line utility for TTN employers",
+    description="Basic Command line utility",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/vibhor-kukreja/ttn-cli",
