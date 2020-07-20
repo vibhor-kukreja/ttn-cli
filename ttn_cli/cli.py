@@ -15,7 +15,7 @@ def cli():
 @cli.group()
 def git():
     """
-    function act as a group which is linked to root cli function.
+    Group which contains different git commands.
     """
     pass
 
@@ -23,7 +23,7 @@ def git():
 @git.command()
 def init_repo():
     """
-    command used to initialise the repository.
+    Initialise the repository.
     """
     click.echo(cmd_git.init_repo())
 
@@ -31,7 +31,7 @@ def init_repo():
 @git.command()
 def branch():
     """
-    command used to show the current branch.
+    Show the current branch.
     """
     click.echo(cmd_git.get_active_branch())
 
@@ -39,7 +39,7 @@ def branch():
 @git.command()
 def branches():
     """
-    command used to list all the branches in a repository.
+    List all the branches in a repository.
     """
     click.echo(cmd_git.get_all_branches())
 
@@ -47,7 +47,7 @@ def branches():
 @git.command()
 def commit_count():
     """
-    command used to count the total number of commits.
+    Count the total number of commits.
     """
     click.echo(cmd_git.get_commit_count())
 
@@ -55,7 +55,7 @@ def commit_count():
 @git.command()
 def commit_message():
     """
-    command used to show the commit messages.
+    Command used to show the commit messages.
     """
     click.echo(cmd_git.get_commit_message())
 
@@ -65,7 +65,7 @@ def commit_message():
 @click.option('--author', '-a', help='name of author', required=True)
 def logs(from_date, author):
     """
-    command used to fetch user logs from a particular date
+    Command used to fetch user logs from a particular date
     """
     click.echo(cmd_git.get_logs(author=author, from_date=from_date))
 
@@ -74,7 +74,7 @@ def logs(from_date, author):
 @click.option('--branch', '-b', help='branch name', required=True)
 def branch_checkout(branch):
     """
-    command used to checkout to any particular branch
+    Checkout to any particular branch
     """
     click.echo(cmd_git.branch_checkout(branch_name=branch))
 
@@ -83,7 +83,7 @@ def branch_checkout(branch):
 @click.option('--branch', '-b', help='branch name', required=True)
 def delete_local_branch(branch):
     """
-    command used to delete any local branch.
+    Delete any local branch.
     """
     click.echo(cmd_git.delete_local_branch(branch_name=branch))
 
@@ -91,7 +91,7 @@ def delete_local_branch(branch):
 @cli.group()
 def network():
     """
-    function act as a group which is linked to root cli function.
+    Group which contains different network commands.
     """
     pass
 
@@ -99,7 +99,7 @@ def network():
 @network.command()
 def show_public_ip():
     """
-    command used to fetch your public IP
+    Fetch your public IP
     """
     click.echo(cmd_network.get_public_ip())
 
@@ -107,6 +107,6 @@ def show_public_ip():
 @network.command()
 def show_private_ip():
     """
-    command used to fetch your private IP
+    Fetch your private IP
     """
     click.echo(cmd_network.get_private_ip())
