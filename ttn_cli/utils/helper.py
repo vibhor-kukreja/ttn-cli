@@ -45,9 +45,23 @@ def get_methods(class_name: AnyStr) -> Dict:
     methods = dict()
     try:
         module = import_module("ttn_cli.modules.cmd_{}".format(class_name))
-        methods_tuple = \
-            inspect.getmembers(module, predicate=inspect.isfunction)
-        for name, method in methods_tuple:
+
+        class_tuple = \
+            dict(inspect.getmembers(module, predicate=inspect.isclass))
+
+        # will call init method
+        class_object = class_tuple['Command']()
+
+        # below gets the public methods out of the chosen module
+        # and rejects other private and protected methods
+        avail_methods = \
+            [method for method in
+             inspect.getmembers(class_object,
+                                predicate=inspect.ismethod)
+             if not method[0].startswith("_")]
+
+        # create a dict for menu of available methods
+        for name, method in avail_methods:
             methods.update({name: method})
         return methods
     except ModuleNotFoundError:

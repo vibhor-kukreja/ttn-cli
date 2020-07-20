@@ -17,6 +17,10 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
+    install_requires=[
+        'Click==7.1.0',
+        'GitPython==3.1.3',
+    ],
     entry_points={
         'console_scripts': [
             'ttn_cli=ttn_cli:main',
